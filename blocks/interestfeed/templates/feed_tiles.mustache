@@ -1,0 +1,46 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+}}
+{{!
+    @template block_interestfeed/feed_tiles
+
+    Tile layout for block_interestfeed/feed, modelled on the Tiles course format's
+    activity sub tiles: large purpose-coloured icon in a circle on a light panel,
+    name underneath. The whole tile is a link (stretched-link); the dismiss button
+    sits above it so it stays clickable.
+
+    Example context (json):
+    {
+        "items": [{
+            "cmid": 42, "name": "Year 5 Medicine SSP Block 1 Allocations", "url": "#", "iconurl": "#",
+            "modname": "File", "purpose": "content", "isbranded": false, "coursename": "Year 5",
+            "courseurl": "#", "sectionname": "Medicine SSPs", "time": "13/10/26, 10:15", "isnew": true
+        }]
+    }
+}}
+<ul class="block-interestfeed-tiles list-unstyled mb-0" data-region="interestfeed-list">
+    {{#items}}
+    <li class="block-interestfeed-tile card shadow-sm" data-region="interestfeed-item" data-cmid="{{cmid}}">
+        <div class="block-interestfeed-tile-top">
+            {{#isnew}}<span class="badge bg-success block-interestfeed-tile-badge">{{#str}}new, block_interestfeed{{/str}}</span>{{/isnew}}
+            {{^isnew}}<span class="badge bg-info block-interestfeed-tile-badge">{{#str}}updated, block_interestfeed{{/str}}</span>{{/isnew}}
+            <button type="button" class="btn btn-link btn-sm block-interestfeed-tile-dismiss"
+                    data-action="interestfeed-dismiss" data-cmid="{{cmid}}">
+                {{#pix}}e/cancel, core{{/pix}}<span class="visually-hidden">{{#str}}dismiss, block_interestfeed{{/str}}: {{{name}}}</span>
+            </button>
+            <div class="block-interestfeed-tile-iconcircle">
+                <div class="activityiconcontainer {{purpose}}{{#isbranded}} isbranded{{/isbranded}}">
+                    <img class="activityicon" src="{{iconurl}}" alt="" aria-hidden="true">
+                </div>
+            </div>
+        </div>
+        <div class="block-interestfeed-tile-body">
+            <a href="{{url}}" class="stretched-link block-interestfeed-tile-name">
+                <span class="visually-hidden">{{modname}}: </span>{{{name}}}
+            </a>
+            <div class="small text-muted block-interestfeed-tile-meta">{{{coursename}}} &middot; {{{sectionname}}}</div>
+            <div class="small text-muted">{{time}}</div>
+        </div>
+    </li>
+    {{/items}}
+</ul>

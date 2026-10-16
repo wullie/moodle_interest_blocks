@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/interestflag/db" VERSION="20261009" COMMENT="XMLDB file for block_interestflag"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+
+    <!--
+      One row per thing a user follows.
+        sectionid = 0  -> the whole course (covers every section)
+        sectionid > 0  -> a single course section
+    -->
+    <TABLE NAME="block_interestflag_flags" COMMENT="Courses and sections each user has flagged as being of interest">
+      <FIELDS>
+        <FIELD NAME="id"          TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid"      TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="courseid"    TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="sectionid"   TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="course_sections.id, or 0 for the whole course"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary"     TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid_fk"   TYPE="foreign" FIELDS="userid"   REFTABLE="user"   REFFIELDS="id"/>
+        <KEY NAME="courseid_fk" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="user_course_section" UNIQUE="true"  FIELDS="userid, courseid, sectionid"/>
+        <INDEX NAME="sectionid"           UNIQUE="false" FIELDS="sectionid"/>
+      </INDEXES>
+    </TABLE>
+
+  </TABLES>
+</XMLDB>

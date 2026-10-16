@@ -1,0 +1,42 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+}}
+{{!
+    @template block_interestfeed/feed_list
+
+    Compact list layout for block_interestfeed/feed.
+
+    Example context (json):
+    {
+        "items": [{
+            "cmid": 42, "name": "Week 3 lecture slides", "url": "#", "iconurl": "#", "modname": "File",
+            "purpose": "content", "isbranded": false, "coursename": "Clinical Skills", "courseurl": "#",
+            "sectionname": "Week 3", "time": "13/10/26, 10:15", "isnew": true
+        }]
+    }
+}}
+<ul class="list-unstyled mb-0" data-region="interestfeed-list">
+    {{#items}}
+    <li class="d-flex align-items-start py-2 border-bottom" data-region="interestfeed-item" data-cmid="{{cmid}}">
+        <div class="activityiconcontainer smaller {{purpose}}{{#isbranded}} isbranded{{/isbranded}} me-2">
+            <img class="activityicon" src="{{iconurl}}" alt="" aria-hidden="true">
+        </div>
+        <div class="flex-grow-1 text-break">
+            <div>
+                <span class="visually-hidden">{{modname}}: </span>
+                <a href="{{url}}" class="fw-bold">{{{name}}}</a>
+                {{#isnew}}<span class="badge bg-success ms-1">{{#str}}new, block_interestfeed{{/str}}</span>{{/isnew}}
+                {{^isnew}}<span class="badge bg-info ms-1">{{#str}}updated, block_interestfeed{{/str}}</span>{{/isnew}}
+            </div>
+            <div class="small text-muted">
+                <a class="text-reset" href="{{courseurl}}">{{{coursename}}}</a> &middot; {{{sectionname}}}
+            </div>
+            <div class="small text-muted">{{time}}</div>
+        </div>
+        <button type="button" class="btn btn-link btn-sm p-0 ms-2 text-muted"
+                data-action="interestfeed-dismiss" data-cmid="{{cmid}}">
+            {{#pix}}e/cancel, core{{/pix}}<span class="visually-hidden">{{#str}}dismiss, block_interestfeed{{/str}}: {{{name}}}</span>
+        </button>
+    </li>
+    {{/items}}
+</ul>

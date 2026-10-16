@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/interestfeed/db" VERSION="20261009" COMMENT="XMLDB file for block_interestfeed"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+
+    <!--
+      Change log, one row per course module. Written by event observers when a
+      module is created or updated, so the Dashboard never has to scan modules
+      or the log store. The module's current section is read from modinfo at
+      display time, so moving a module between sections needs no bookkeeping.
+    -->
+    <TABLE NAME="block_interestfeed_changes" COMMENT="When each course module was last added or updated">
+      <FIELDS>
+        <FIELD NAME="id"          TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid"    TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="cmid"        TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="userid"      TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="Who made the latest change (0 = unknown); they are not shown their own change"/>
+        <FIELD NAME="timeadded"   TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="When the module was created"/>
+        <FIELD NAME="timechanged" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="Latest create or update"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary"     TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid_fk" TYPE="foreign" FIELDS="courseid" REFTABLE="course"         REFFIELDS="id"/>
+        <KEY NAME="cmid_fk"     TYPE="foreign-unique" FIELDS="cmid" REFTABLE="course_modules" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="timechanged" UNIQUE="false" FIELDS="timechanged"/>
+      </INDEXES>
+    </TABLE>
+
+    <!--
+      When a user last saw (opened or dismissed) a module. An item is shown on the
+      Dashboard only while its latest change is newer than this, so an update made
+      after the user looked brings it back.
+    -->
+    <TABLE NAME="block_interestfeed_seen" COMMENT="When each user last viewed or dismissed a module">
+      <FIELDS>
+        <FIELD NAME="id"       TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid"   TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="cmid"     TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="timeseen" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary"   TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user"           REFFIELDS="id"/>
+        <KEY NAME="cmid_fk"   TYPE="foreign" FIELDS="cmid"   REFTABLE="course_modules" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="user_cm"  UNIQUE="true"  FIELDS="userid, cmid"/>
+        <INDEX NAME="timeseen" UNIQUE="false" FIELDS="timeseen"/>
+      </INDEXES>
+    </TABLE>
+
+  </TABLES>
+</XMLDB>

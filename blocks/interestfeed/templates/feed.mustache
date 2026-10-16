@@ -1,0 +1,49 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+}}
+{{!
+    @template block_interestfeed/feed
+
+    New and updated content in the courses and sections the user follows.
+    Rendered server-side by block_interestfeed and re-rendered by
+    block_interestfeed/feed after each dismiss.
+
+    Context variables required for this template:
+    * items - [{cmid, name, url, iconurl, modname, purpose, isbranded, coursename, courseurl, sectionname, time, isnew}]
+    * hasitems - Whether there are items
+    * hasmore - Whether more items exist beyond maxitems
+    * hasflags - Whether the user follows anything
+    * istiles - Tiles layout (true) or list layout (false)
+    * maxitems - Display cap
+    * lookbackdays - Look-back window in days
+
+    Example context (json):
+    {
+        "items": [{
+            "cmid": 42, "name": "Year 5 Medicine SSP Block 1 Allocations",
+            "url": "https://example.com/mod/resource/view.php?id=42",
+            "iconurl": "https://example.com/theme/image.php/boost/resource/1/monologo",
+            "modname": "File", "purpose": "content", "isbranded": false,
+            "coursename": "Year 5", "courseurl": "https://example.com/course/view.php?id=2",
+            "sectionname": "Medicine SSPs", "time": "13/10/26, 10:15", "isnew": true
+        }],
+        "hasitems": true, "hasmore": false, "hasflags": true, "istiles": true,
+        "maxitems": 10, "lookbackdays": 14
+    }
+}}
+{{#hasitems}}
+    {{#istiles}}{{> block_interestfeed/feed_tiles }}{{/istiles}}
+    {{^istiles}}{{> block_interestfeed/feed_list }}{{/istiles}}
+<div class="d-flex justify-content-between align-items-center mt-2">
+    <span class="small text-muted">{{#hasmore}}{{#str}}showingfirst, block_interestfeed, {{maxitems}}{{/str}}{{/hasmore}}</span>
+    <button type="button" class="btn btn-link btn-sm p-0" data-action="interestfeed-dismissall">
+        {{#str}}dismissall, block_interestfeed{{/str}}
+    </button>
+</div>
+{{/hasitems}}
+{{^hasitems}}
+<p class="text-muted mb-0" data-region="interestfeed-empty">
+    {{#hasflags}}{{#str}}nothingnew, block_interestfeed, {{lookbackdays}}{{/str}}{{/hasflags}}
+    {{^hasflags}}{{#str}}nothingfollowed, block_interestfeed{{/str}}{{/hasflags}}
+</p>
+{{/hasitems}}

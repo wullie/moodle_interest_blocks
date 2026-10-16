@@ -1,0 +1,66 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+}}
+{{!
+    @template block_interestflag/controls
+
+    Follow / unfollow controls for a course and its sections.
+    Rendered server-side by block_interestflag and re-rendered by
+    block_interestflag/flag after each toggle.
+
+    Context variables required for this template:
+    * courseid - Course ID
+    * courseflagged - Whether the whole course is followed
+    * sections - [{id, name, flagged, covered, current}]
+    * hassections - Whether there are any sections
+    * dashboardurl - Link to the Dashboard
+
+    Example context (json):
+    {
+        "courseid": 2,
+        "courseflagged": false,
+        "hassections": true,
+        "sections": [
+            {"id": 10, "name": "General", "flagged": false, "covered": false, "current": false},
+            {"id": 11, "name": "Week 1", "flagged": true, "covered": false, "current": true}
+        ],
+        "dashboardurl": "https://example.com/my/"
+    }
+}}
+<p class="small text-muted mb-2">{{#str}}intro, block_interestflag{{/str}}</p>
+
+<button type="button"
+        class="btn {{#courseflagged}}btn-primary{{/courseflagged}}{{^courseflagged}}btn-outline-primary{{/courseflagged}} w-100 mb-3"
+        data-action="interestflag-toggle"
+        data-sectionid="0"
+        data-flagged="{{#courseflagged}}1{{/courseflagged}}{{^courseflagged}}0{{/courseflagged}}"
+        aria-pressed="{{#courseflagged}}true{{/courseflagged}}{{^courseflagged}}false{{/courseflagged}}">
+    {{#courseflagged}}{{#pix}}i/flagged, core{{/pix}} {{#str}}followingcourse, block_interestflag{{/str}}{{/courseflagged}}
+    {{^courseflagged}}{{#pix}}i/unflagged, core{{/pix}} {{#str}}followcourse, block_interestflag{{/str}}{{/courseflagged}}
+</button>
+
+{{#hassections}}
+<h6 class="mb-1">{{#str}}sections, block_interestflag{{/str}}</h6>
+<ul class="list-unstyled mb-2">
+    {{#sections}}
+    <li class="d-flex align-items-center justify-content-between py-1 border-bottom{{#current}} fw-bold{{/current}}">
+        <span class="text-truncate me-2"{{#current}} aria-current="true"{{/current}}>{{{name}}}</span>
+        {{#covered}}
+        <span class="badge bg-secondary">{{#str}}included, block_interestflag{{/str}}<span class="visually-hidden">: {{{name}}}</span></span>
+        {{/covered}}
+        {{^covered}}
+        <button type="button"
+                class="btn btn-sm text-nowrap {{#flagged}}btn-primary{{/flagged}}{{^flagged}}btn-outline-secondary{{/flagged}}"
+                data-action="interestflag-toggle"
+                data-sectionid="{{id}}"
+                data-flagged="{{#flagged}}1{{/flagged}}{{^flagged}}0{{/flagged}}"
+                aria-pressed="{{#flagged}}true{{/flagged}}{{^flagged}}false{{/flagged}}">
+            {{#flagged}}{{#str}}following, block_interestflag{{/str}}{{/flagged}}{{^flagged}}{{#str}}follow, block_interestflag{{/str}}{{/flagged}}<span class="visually-hidden">: {{{name}}}</span>
+        </button>
+        {{/covered}}
+    </li>
+    {{/sections}}
+</ul>
+{{/hassections}}
+
+<a class="small" href="{{dashboardurl}}">{{#str}}dashboardlink, block_interestflag{{/str}}</a>

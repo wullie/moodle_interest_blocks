@@ -1,0 +1,121 @@
+/**
+ * Tile layout for block_interestfeed, modelled on the Tiles course format's activity sub tiles.
+ * Moodle loads a block's styles.css automatically (purge caches after changing it).
+ */
+
+.block-interestfeed-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.block-interestfeed-tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: .5rem;
+    transition: box-shadow .15s ease-in-out, transform .15s ease-in-out;
+}
+
+.block-interestfeed-tile:hover,
+.block-interestfeed-tile:focus-within {
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important; /* Beat Bootstrap's .shadow-sm. */
+    transform: translateY(-2px);
+}
+
+.block-interestfeed-tile:focus-within {
+    outline: 2px solid var(--bs-primary, #0f6cbf);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .block-interestfeed-tile {
+        transition: none;
+    }
+    .block-interestfeed-tile:hover,
+    .block-interestfeed-tile:focus-within {
+        transform: none;
+    }
+}
+
+/* Grey panel with the icon in a soft circle. */
+.block-interestfeed-tile-top {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.75rem 0 1.25rem;
+    background-color: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.block-interestfeed-tile-iconcircle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 1px dashed var(--bs-border-color, #dee2e6);
+    background-color: rgba(255, 255, 255, .6);
+}
+
+/* Keep the theme's purpose colouring on the icon, but enlarge it and drop the small-icon chrome. */
+.block-interestfeed-tile .activityiconcontainer {
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+}
+
+.block-interestfeed-tile .activityiconcontainer .activityicon {
+    width: 56px;
+    height: 56px;
+    max-width: none;
+    max-height: none;
+}
+
+.block-interestfeed-tile-badge {
+    position: absolute;
+    top: .5rem;
+    left: .5rem;
+}
+
+/* Above the stretched link so it stays clickable. */
+.block-interestfeed-tile-dismiss {
+    position: absolute;
+    top: .25rem;
+    right: .25rem;
+    z-index: 2;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.block-interestfeed-tile-body {
+    padding: .75rem;
+    text-align: center;
+}
+
+.block-interestfeed-tile-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: var(--bs-body-color, #1d2125);
+    text-decoration: none;
+}
+
+.block-interestfeed-tile-name:hover,
+.block-interestfeed-tile-name:focus {
+    text-decoration: underline;
+}
+
+.block-interestfeed-tile-name:focus {
+    outline: none; /* The whole tile shows the focus ring via :focus-within. */
+}
+
+.block-interestfeed-tile-meta {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
